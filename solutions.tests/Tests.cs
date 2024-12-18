@@ -8,7 +8,7 @@ public class Tests
     {
         get
         {
-            yield return new TestCaseData(null, null, null);
+            yield return new TestCaseData(new day_2024_12_01.app.Solution(), null, null);
         }
     }
 
