@@ -21,6 +21,13 @@ public static class Solver
 
     public static object Part2(Data data)
     {
-        return null!;
+        var rightFrequency = data.Right
+            .GroupBy(n => n)
+            .ToDictionary(g => g.Key, g => g.Count());
+
+        return data.Left
+            .AsParallel()
+            .Select(number => number * rightFrequency.GetValueOrDefault(number, 0))
+            .Sum();
     }
 }
