@@ -1,5 +1,4 @@
 namespace day_2024_12_02;
 
-public class Data
-{
-}
+public record Data(Report[] Reports);
+public record Report(int[] Levels);
