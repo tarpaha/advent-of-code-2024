@@ -7,25 +7,44 @@ public static class Solver
         return data
             .Reports
             .AsParallel()
-            .Count(IsReportSafe);
+            .Count(report => IsReportSafe(report));
     }
 
     public static object Part2(Data data)
     {
-        return null!;
+        return data
+            .Reports
+            .AsParallel()
+            .Count(IsReportSafeWithDampener);
     }
 
-    public static bool IsReportSafe(Report report)
+    public static bool IsReportSafeWithDampener(Report report)
+    {
+        var isSafe = IsReportSafe(report);
+        for(var index = 0; index < report.Levels.Length && !isSafe; index++)
+        {
+            isSafe |= IsReportSafe(report, index);
+        }
+        return isSafe;
+    }
+
+    public static bool IsReportSafe(Report report, int? exceptIndex = null)
     {
         var increasing = false;
         var decreasing = false;
-        for (var i = 1; i < report.Levels.Length; i++)
+        var (previous, start) = exceptIndex == 0
+            ? (report.Levels[1], 2)
+            : (report.Levels[0], 1);
+        for (var index = start; index < report.Levels.Length; index++)
         {
-            var diff = report.Levels[i] - report.Levels[i - 1];
+            if(exceptIndex == index)
+                continue;
+            var diff = report.Levels[index] - previous;
             increasing |= diff > 0;
             decreasing |= diff < 0;
             if(diff == 0 || Math.Abs(diff) > 3 || (increasing && decreasing))
                 return false;
+            previous = report.Levels[index];
         }
         return true;
     }

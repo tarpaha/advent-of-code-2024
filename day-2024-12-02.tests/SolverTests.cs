@@ -20,7 +20,7 @@ public class SolverTests
     [Test]
     public void Part2()
     {
-        Assert.That(Solver.Part2(Parser.Parse(Data)), Is.Null);
+        Assert.That(Solver.Part2(Parser.Parse(Data)), Is.EqualTo(4));
     }
 
     [TestCase(0, true)]
@@ -33,5 +33,17 @@ public class SolverTests
     {
         var data = Parser.Parse(Data);
         Assert.That(Solver.IsReportSafe(data.Reports[reportIndex]), Is.EqualTo(expected));
+    }
+    
+    [TestCase(0, true)]
+    [TestCase(1, false)]
+    [TestCase(2, false)]
+    [TestCase(3, true)]
+    [TestCase(4, true)]
+    [TestCase(5, true)]
+    public void IsReportSafeWithDampener_Works_Correctly(int reportIndex, bool expected)
+    {
+        var data = Parser.Parse(Data);
+        Assert.That(Solver.IsReportSafeWithDampener(data.Reports[reportIndex]), Is.EqualTo(expected));
     }
 }
