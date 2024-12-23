@@ -17,7 +17,14 @@ public static class Solver
 
     public static object Part2(Data data)
     {
-        return null!;
+        var sum = 0;
+        for (var x = 0; x < data.Width; x++)
+        for (var y = 0; y < data.Height; y++)
+        {
+            if (XmasFound(data, x, y))
+                sum += 1;
+        }
+        return sum;
     }
 
     private static int GetStringOccurrences(Data data, int x, int y, string str)
@@ -47,5 +54,20 @@ public static class Solver
         }
 
         return true;
+    }
+    
+    private static bool XmasFound(Data data, int x, int y)
+    {
+        if(data.Letters[x, y] != 'A')
+            return false;
+        if(x < 1 || x >= data.Width - 1 || y < 1 || y >= data.Height - 1)
+            return false;
+        var diagonalOne = (data.Letters[x - 1, y - 1] == 'M' && data.Letters[x + 1, y + 1] == 'S') ||
+                          (data.Letters[x - 1, y - 1] == 'S' && data.Letters[x + 1, y + 1] == 'M');
+        if(!diagonalOne)
+            return false;
+        var diagonalTwo = (data.Letters[x + 1, y - 1] == 'M' && data.Letters[x - 1, y + 1] == 'S') ||
+                          (data.Letters[x + 1, y - 1] == 'S' && data.Letters[x - 1, y + 1] == 'M');
+        return diagonalTwo;
     }
 }
