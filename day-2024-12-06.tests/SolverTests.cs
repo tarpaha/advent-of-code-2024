@@ -18,7 +18,7 @@ public class SolverTests
     [Test]
     public void Part1()
     {
-        Assert.That(Solver.Part1(Parser.Parse(Data)), Is.Null);
+        Assert.That(Solver.Part1(Parser.Parse(Data)), Is.EqualTo(41));
     }
     
     [Test]
