@@ -4,14 +4,36 @@ public static class Solver
 {
     public static object Part1(Data data)
     {
+        return GetVisitedPositions(data)!.Count;
+    }
+
+    public static object Part2(Data data)
+    {
+        var loopsCount = 0;
+        foreach (var position in GetVisitedPositions(data)!)
+        {
+            if(position == (data.StartX, data.StartY))
+                continue;
+            
+            data.Cells[position.x, position.y] = '#';
+            if(GetVisitedPositions(data) == null)
+                loopsCount++;
+            data.Cells[position.x, position.y] = '.';
+        }
+        return loopsCount;
+    }
+
+    private static HashSet<(int x, int y)>? GetVisitedPositions(Data data)
+    {
+        var visited = new HashSet<(int x, int y, Direction direction)>();
+
         var (x, y) = (data.StartX, data.StartY);
         var direction = Direction.Up;
         
-        var visited = new HashSet<(int x, int y)>();
-        
         while (true)
         {
-            visited.Add((x, y));
+            if (!visited.Add((x, y, direction)))
+                return null;
 
             var (newX, newY) = direction switch
             {
@@ -40,13 +62,8 @@ public static class Solver
             
             (x, y) = (newX, newY);
         }
-
-        return visited.Count;
-    }
-
-    public static object Part2(Data data)
-    {
-        return null!;
+        
+        return visited.Select(t => (t.x, t.y)).ToHashSet();
     }
     
     private enum Direction { Up, Right, Down, Left }
